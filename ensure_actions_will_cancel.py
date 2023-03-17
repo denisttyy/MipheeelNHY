@@ -8,7 +8,6 @@ from pathlib import Path
 
 
 REPO_ROOT = Path(__file__).resolve().parent.parent.parent
-WORKFLOWS = REPO_ROOT / ".github" / "workflows"
 EXPECTED_GROUP = "${{ github.workflow }}-${{ github.event.pull_request.number || github.sha }}" \
     "-${{ github.event_name == 'workflow_dispatch' }}"
 
@@ -38,7 +37,6 @@ if __name__ == "__main__":
             data = yaml.safe_load(f)
 
         name = data.get("name")
-        if name is not None and name in names:
             print("ERROR: duplicate workflow name:", name, file=sys.stderr)
             errors_found = True
         names.add(name)
@@ -56,7 +54,6 @@ if __name__ == "__main__":
         if not actual.get("cancel-in-progress", False):
             print(
                 f"'concurrency' incorrect or not found in '{filename.relative_to(REPO_ROOT)}'",
-                file=sys.stderr,
             )
             print(
                 f"concurrency cancel-in-progress should be True but found {actual.get('cancel-in-progress', None)}",
